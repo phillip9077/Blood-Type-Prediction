@@ -6,7 +6,7 @@ from keras import losses
 from keras import optimizers
 
 # reading blood type data
-dataframe = pd.read_csv('C:/VIA Tech/Blood Type Prediction/Blood types.csv',
+dataframe = pd.read_csv('*wherever you put this project folder*/Blood types.csv',
                         ).values
 
 X = []
@@ -69,7 +69,7 @@ X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_s
 #
 # model.save('C:/VIA Tech/Blood Type Prediction')
 
-model = keras.models.load_model('C:/VIA Tech/Blood Type Prediction')
+model = keras.models.load_model('*wherever you put this project folder*/Blood Type Prediction')
 
 is_quit = False
 while not is_quit:
