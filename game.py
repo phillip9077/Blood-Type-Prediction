@@ -17,7 +17,8 @@ type_font = pygame.font.SysFont('Trebuchet MS', 80)
 text1 = text_font.render('Please enter the first blood type!', True, (0, 0, 0))
 text2 = text_font.render('Please enter the second blood type!', True, (0, 0, 0))
 result_text = text_font.render('These are your inputted blood types!', True, (0, 0, 0))
-legend = caption_font.render('A for type A, B for type B, O for type O', True, (0, 0, 0))
+legend = caption_font.render('A = type A, B = type B, F = type AB, O = type O', True,
+                             (0, 0, 0))
 blood_type_count = 0
 first_type = ''
 second_type = ''
@@ -42,7 +43,7 @@ model = keras.models.load_model('C:/VIA Tech/Blood Type Prediction')
 prediction_dict = {}
 
 
-# Method to return either the blood type A, B, or O from keyboard input
+# Method to return either the blood type A, B, AB, or O from keyboard input
 def assign_blood_type(e):
     blood_type = ''
     if e.key == pygame.K_a:
@@ -51,6 +52,9 @@ def assign_blood_type(e):
         blood_type = pygame.key.name(pygame.K_b).capitalize()
     elif e.key == pygame.K_o:
         blood_type = pygame.key.name(pygame.K_o).capitalize()
+    elif e.key == pygame.K_f:
+        blood_type = pygame.key.name(pygame.K_a).capitalize() + \
+                     pygame.key.name(pygame.K_b).capitalize()
     return blood_type
 
 
@@ -106,6 +110,20 @@ def drawWrappedText(surface, text, color, rect, font, aa=False, bkg=None):
     return text
 
 
+# merges two lists into a single list of the same length
+def mergeList(firstType, secondType):
+    inputArr = []
+    for i in range(len(firstType)):
+        if firstType[i] != secondType[i]:
+            if firstType[i] == 1:
+                inputArr.append(firstType[i])
+            elif secondType[i] == 1:
+                inputArr.append(secondType[i])
+        else:
+            inputArr.append(firstType[i])
+    return inputArr
+
+
 # Running the Pygame application
 while True:
     clock.tick(60)
@@ -133,14 +151,14 @@ while True:
         if blood_type_count == 0:
             win.blit(chat, (250, 5))
             win.blit(text1, (380, 35))
-            win.blit(legend, (400, 70))
+            win.blit(legend, (0, 70))
 
         # Display corresponding text for inputting second blood type
         elif blood_type_count == 1:
             win.blit(chat, (250, 5))
             win.blit(text2, (360, 35))
-            win.blit(legend, (400, 70))
-            first_type_surface = type_font.render(first_type + " + ", True, (255, 0, 0))
+            win.blit(legend, (380, 70))
+            first_type_surface = type_font.render(first_type, True, (255, 0, 0))
             win.blit(first_type_surface, (410, 250))
 
         else:
@@ -172,10 +190,10 @@ while True:
             type_two_plus = second_type + "+"
             type_one_minus = first_type + "-"
             type_two_minus = second_type + "-"
-            prediction_plus = model.predict([blood_types[type_one_plus]
-                                             + blood_types[type_two_plus]])[0]
-            prediction_minus = model.predict([blood_types[type_one_minus]
-                                              + blood_types[type_two_minus]])[0]
+            prediction_plus = model.predict([mergeList(blood_types[type_one_plus]
+                                                       , blood_types[type_two_plus])])[0]
+            prediction_minus = model.predict([mergeList(blood_types[type_one_minus]
+                                                        , blood_types[type_two_minus])])[0]
             prediction = []
             for i, val in np.ndenumerate(prediction_plus):
                 prediction.append((val + prediction_minus[i]) / 2)
@@ -225,4 +243,3 @@ while True:
         isRightEnd = False
         model_predicted = False
         isRestart = False
-
