@@ -203,8 +203,8 @@ while True:
             # prediction = []
             # for i, val in np.ndenumerate(prediction_plus):
             #     prediction.append((val + prediction_minus[i]) / 2)
-            prediction = model.predict([mergeList(blood_types[first_type],
-                                                  blood_types[second_type])])[0]
+            prediction = model.predict([np.ndarray.tolist(np.array(blood_types[first_type] |
+                                                 np.array(blood_types[second_type])))])[0]
             temp = prob_array_to_dict(prediction)
             sorted_keys = sorted(temp, key=temp.get, reverse=True)
             for k in sorted_keys:

@@ -61,16 +61,16 @@ model.save('C:/VIA Tech/Blood Type Prediction')
 
 is_quit = False
 while not is_quit:
-    type_one = input("Type your first parent's blood type: ")
-    type_two = input("Type your second parent's blood type: ")
+    type_one = input("Type your first parent's blood type: ").capitalize()
+    type_two = input("Type your second parent's blood type: ").capitalize()
     type_one_plus = type_one + "+"
     type_two_plus = type_two + "+"
     type_one_minus = type_one + "-"
     type_two_minus = type_two + "-"
-    prediction_plus = model.predict([mergeList(blood_types[type_one_plus],
-                                               blood_types[type_two_plus])])[0]
-    prediction_minus = model.predict([mergeList(blood_types[type_one_minus],
-                                                blood_types[type_two_minus])])[0]
+    prediction_plus = model.predict([np.ndarray.tolist(np.array(blood_types[type_one_plus]) |
+                                     np.array(blood_types[type_two_plus]))])[0]
+    prediction_minus = model.predict([np.ndarray.tolist(np.array(blood_types[type_one_minus]) |
+                                      np.array(blood_types[type_two_minus]))])[0]
     prediction = []
     for i, val in np.ndenumerate(prediction_plus):
         prediction.append((val + prediction_minus[i]) / 2)

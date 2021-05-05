@@ -34,7 +34,7 @@ layer1 = keras.layers.Dense(512, activation='relu')(inputs)
 layer2 = keras.layers.Dense(256, activation='relu')(layer1)
 outputs = keras.layers.Dense(4, activation='softmax')(layer2)
 model = keras.Model(inputs=inputs, outputs=outputs, name='bloodtype_model')
-print(model.summary())  
+print(model.summary())
 
 # training the model
 model.compile(
@@ -49,7 +49,7 @@ results = model.evaluate(X, y, verbose=0)
 print('Loss = ', results[0])
 print('Accuracy = ', results[1])
 
-model.save('C:/VIA Tech/Blood Type Prediction')
+# model.save('C:/VIA Tech/Blood Type Prediction')
 
 # Once the model is trained once, you can just uncomment the line below and comment out the
 # model.fit and model.save line (Line 61 and 67).
@@ -57,10 +57,11 @@ model.save('C:/VIA Tech/Blood Type Prediction')
 
 is_quit = False
 while not is_quit:
-    type_one = input("Type your first parent's blood type: ")
-    type_two = input("Type your second parent's blood type: ")
-    prediction = model.predict([mergeList(blood_types[type_one],
-                                          blood_types[type_two])])[0]
+    type_one = input("Type your first parent's blood type: ").capitalize()
+    type_two = input("Type your second parent's blood type: ").capitalize()
+    temp = np.array(blood_types[type_one]) | np.array(blood_types[type_two])
+    temp = np.ndarray.tolist(temp)
+    prediction = model.predict([temp])[0]
     print("The AI predicts the possibilities of your potential blood types are: ", prediction)
     end = input("Do you want to continue? ")
     if end == "No" or end == "no":
