@@ -215,8 +215,8 @@ while True:
             # sorting the probabilities from high to low + rounding the numbers
             temp_yPos = 80
             for k in prediction_dict.keys():
-                win.blit(text_font.render(k + ': ' + str(round(prediction_dict[k], 3) * 100), True,
-                                          (0, 0, 0)),
+                win.blit(text_font.render(k + ': ' + str(round(prediction_dict[k], 3) * 100) + "%",
+                                          True, (0, 0, 0)),
                          (420, temp_yPos))
                 temp_yPos += 50
             # quick description of what the probabilities mean

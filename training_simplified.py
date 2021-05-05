@@ -8,21 +8,6 @@ from tensorflow import keras
 dataframe = pd.read_csv('C:/VIA Tech/Blood Type Prediction/Blood_types_simplified.csv',
                         ).values
 
-
-# creating a training dataset with one-hot encoded inputs and outputs
-def mergeList(firstType, secondType):
-    inputArr = []
-    for i in range(len(firstType)):
-        if firstType[i] != secondType[i]:
-            if firstType[i] == 1:
-                inputArr.append(firstType[i])
-            elif secondType[i] == 1:
-                inputArr.append(secondType[i])
-        else:
-            inputArr.append(firstType[i])
-    return inputArr
-
-
 X = []
 y = []
 blood_types = {'A': [1, 0, 0, 0],
@@ -31,10 +16,10 @@ blood_types = {'A': [1, 0, 0, 0],
                'O': [0, 0, 0, 1]}
 
 for row in dataframe:
-    first_type = blood_types[row[0]]
-    second_type = blood_types[row[1]]
-    resultType = blood_types[row[2]]
-    input_arr = mergeList(first_type, second_type)
+    first_type = np.array(blood_types[row[0]])
+    second_type = np.array(blood_types[row[1]])
+    resultType = np.array(blood_types[row[2]])
+    input_arr = first_type | second_type
     X.append(input_arr)
     y.append(resultType)
 
@@ -49,7 +34,7 @@ layer1 = keras.layers.Dense(512, activation='relu')(inputs)
 layer2 = keras.layers.Dense(256, activation='relu')(layer1)
 outputs = keras.layers.Dense(4, activation='softmax')(layer2)
 model = keras.Model(inputs=inputs, outputs=outputs, name='bloodtype_model')
-print(model.summary())
+print(model.summary())  
 
 # training the model
 model.compile(
