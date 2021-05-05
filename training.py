@@ -4,24 +4,12 @@ from keras import losses
 from keras import optimizers
 from tensorflow import keras
 
-# reading blood type data
+# loading the .csv file into the program
 dataframe = pd.read_csv('C:/VIA Tech/Blood Type Prediction/Blood types.csv',
                         ).values
 
-X = []
-y = []
 
-# creating and splitting the dataset into training and testing datasets
-blood_types = {'A+': [1, 0, 0, 0, 0, 0, 0, 0],
-               'A-': [0, 1, 0, 0, 0, 0, 0, 0],
-               'B+': [0, 0, 1, 0, 0, 0, 0, 0],
-               'B-': [0, 0, 0, 1, 0, 0, 0, 0],
-               'AB+': [0, 0, 0, 0, 1, 0, 0, 0],
-               'AB-': [0, 0, 0, 0, 0, 1, 0, 0],
-               'O+': [0, 0, 0, 0, 0, 0, 1, 0],
-               'O-': [0, 0, 0, 0, 0, 0, 0, 1]}
-
-
+# creating a training dataset with one-hot encoded inputs and outputs
 def mergeList(firstType, secondType):
     inputArr = []
     for i in range(len(firstType)):
@@ -35,7 +23,17 @@ def mergeList(firstType, secondType):
     return inputArr
 
 
-# inputs and outputs both are one-hot encoded
+X = []
+y = []
+blood_types = {'A+': [1, 0, 0, 0, 0, 0, 0, 0],
+               'A-': [0, 1, 0, 0, 0, 0, 0, 0],
+               'B+': [0, 0, 1, 0, 0, 0, 0, 0],
+               'B-': [0, 0, 0, 1, 0, 0, 0, 0],
+               'AB+': [0, 0, 0, 0, 1, 0, 0, 0],
+               'AB-': [0, 0, 0, 0, 0, 1, 0, 0],
+               'O+': [0, 0, 0, 0, 0, 0, 1, 0],
+               'O-': [0, 0, 0, 0, 0, 0, 0, 1]}
+
 for row in dataframe:
     first_type = blood_types[row[0]]
     second_type = blood_types[row[1]]
@@ -47,10 +45,8 @@ for row in dataframe:
 X = np.array(X)
 y = np.array(y)
 
-# X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.2)
-
 # setting up an ANN; can't use a Sequential model because there are two inputs
-# input layer is 16 neurons (8 possible blood types for each parent)
+# input layer is 8 neurons (8 possible blood types for each parent, but concatenated into one array)
 # output layer is 8 neurons (8 possible blood types for the next generation)
 inputs = keras.Input(shape=(8,))
 layer1 = keras.layers.Dense(1024, activation='relu')(inputs)
