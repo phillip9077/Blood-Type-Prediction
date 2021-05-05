@@ -5,7 +5,7 @@ from keras import optimizers
 from tensorflow import keras
 
 # loading the .csv file into the program
-dataframe = pd.read_csv('C:/VIA Tech/Blood Type Prediction/Blood_types.csv',
+dataframe = pd.read_csv('C:/VIA Tech/Blood Type Prediction/Blood_types_simplified.csv',
                         ).values
 
 
@@ -25,14 +25,10 @@ def mergeList(firstType, secondType):
 
 X = []
 y = []
-blood_types = {'A+': [1, 0, 0, 0, 0, 0, 0, 0],
-               'A-': [0, 1, 0, 0, 0, 0, 0, 0],
-               'B+': [0, 0, 1, 0, 0, 0, 0, 0],
-               'B-': [0, 0, 0, 1, 0, 0, 0, 0],
-               'AB+': [0, 0, 0, 0, 1, 0, 0, 0],
-               'AB-': [0, 0, 0, 0, 0, 1, 0, 0],
-               'O+': [0, 0, 0, 0, 0, 0, 1, 0],
-               'O-': [0, 0, 0, 0, 0, 0, 0, 1]}
+blood_types = {'A': [1, 0, 0, 0],
+               'B': [0, 1, 0, 0],
+               'AB': [0, 0, 1, 0],
+               'O': [0, 0, 0, 1]}
 
 for row in dataframe:
     first_type = blood_types[row[0]]
@@ -46,12 +42,12 @@ X = np.array(X)
 y = np.array(y)
 
 # setting up an ANN; can't use a Sequential model because there are two inputs
-# input layer is 8 neurons (8 possible blood types for each parent, but concatenated into one array)
-# output layer is 8 neurons (8 possible blood types for the next generation)
-inputs = keras.Input(shape=(8,))
-layer1 = keras.layers.Dense(1024, activation='relu')(inputs)
-layer2 = keras.layers.Dense(512, activation='relu')(layer1)
-outputs = keras.layers.Dense(8, activation='softmax')(layer2)
+# input layer is 4 neurons (4 possible blood types for each parent, but concatenated into one array)
+# output layer is 4 neurons (4 possible blood types for the next generation)
+inputs = keras.Input(shape=(4,))
+layer1 = keras.layers.Dense(512, activation='relu')(inputs)
+layer2 = keras.layers.Dense(256, activation='relu')(layer1)
+outputs = keras.layers.Dense(4, activation='softmax')(layer2)
 model = keras.Model(inputs=inputs, outputs=outputs, name='bloodtype_model')
 print(model.summary())
 
@@ -62,7 +58,7 @@ model.compile(
     metrics=['accuracy'],
 )
 
-model.fit(X, y, batch_size=32, epochs=500, shuffle=True)
+model.fit(X, y, batch_size=8, epochs=500, shuffle=True)
 
 results = model.evaluate(X, y, verbose=0)
 print('Loss = ', results[0])
@@ -71,24 +67,15 @@ print('Accuracy = ', results[1])
 model.save('C:/VIA Tech/Blood Type Prediction')
 
 # Once the model is trained once, you can just uncomment the line below and comment out the
-# model.fit and model.save line (Line 58 and 70).
+# model.fit and model.save line (Line 61 and 67).
 # model = keras.models.load_model('C:/VIA Tech/Blood Type Prediction')
 
 is_quit = False
 while not is_quit:
     type_one = input("Type your first parent's blood type: ")
     type_two = input("Type your second parent's blood type: ")
-    type_one_plus = type_one + "+"
-    type_two_plus = type_two + "+"
-    type_one_minus = type_one + "-"
-    type_two_minus = type_two + "-"
-    prediction_plus = model.predict([mergeList(blood_types[type_one_plus],
-                                               blood_types[type_two_plus])])[0]
-    prediction_minus = model.predict([mergeList(blood_types[type_one_minus],
-                                                blood_types[type_two_minus])])[0]
-    prediction = []
-    for i, val in np.ndenumerate(prediction_plus):
-        prediction.append((val + prediction_minus[i]) / 2)
+    prediction = model.predict([mergeList(blood_types[type_one],
+                                          blood_types[type_two])])[0]
     print("The AI predicts the possibilities of your potential blood types are: ", prediction)
     end = input("Do you want to continue? ")
     if end == "No" or end == "no":

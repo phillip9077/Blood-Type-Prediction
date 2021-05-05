@@ -31,14 +31,19 @@ isRightEnd = False
 model_predicted = False
 isRestart = False
 
-blood_types = {'A+': [1, 0, 0, 0, 0, 0, 0, 0],
-               'A-': [0, 1, 0, 0, 0, 0, 0, 0],
-               'B+': [0, 0, 1, 0, 0, 0, 0, 0],
-               'B-': [0, 0, 0, 1, 0, 0, 0, 0],
-               'AB+': [0, 0, 0, 0, 1, 0, 0, 0],
-               'AB-': [0, 0, 0, 0, 0, 1, 0, 0],
-               'O+': [0, 0, 0, 0, 0, 0, 1, 0],
-               'O-': [0, 0, 0, 0, 0, 0, 0, 1]}
+# commented out dictionary is for the non-simplified neural network
+# blood_types = {'A+': [1, 0, 0, 0, 0, 0, 0, 0],
+#                'A-': [0, 1, 0, 0, 0, 0, 0, 0],
+#                'B+': [0, 0, 1, 0, 0, 0, 0, 0],
+#                'B-': [0, 0, 0, 1, 0, 0, 0, 0],
+#                'AB+': [0, 0, 0, 0, 1, 0, 0, 0],
+#                'AB-': [0, 0, 0, 0, 0, 1, 0, 0],
+#                'O+': [0, 0, 0, 0, 0, 0, 1, 0],
+#                'O-': [0, 0, 0, 0, 0, 0, 0, 1]}
+blood_types = {'A': [1, 0, 0, 0],
+               'B': [0, 1, 0, 0],
+               'AB': [0, 0, 1, 0],
+               'O': [0, 0, 0, 1]}
 model = keras.models.load_model('C:/VIA Tech/Blood Type Prediction')
 prediction_dict = {}
 
@@ -151,7 +156,7 @@ while True:
         if blood_type_count == 0:
             win.blit(chat, (250, 5))
             win.blit(text1, (380, 35))
-            win.blit(legend, (0, 70))
+            win.blit(legend, (380, 70))
 
         # Display corresponding text for inputting second blood type
         elif blood_type_count == 1:
@@ -186,17 +191,20 @@ while True:
     # Use the inputted blood types to run through the ANN and display its predictions
     if first_type != '' and second_type != '' and isMovementDone:
         if not model_predicted:
-            type_one_plus = first_type + "+"
-            type_two_plus = second_type + "+"
-            type_one_minus = first_type + "-"
-            type_two_minus = second_type + "-"
-            prediction_plus = model.predict([mergeList(blood_types[type_one_plus]
-                                                       , blood_types[type_two_plus])])[0]
-            prediction_minus = model.predict([mergeList(blood_types[type_one_minus]
-                                                        , blood_types[type_two_minus])])[0]
-            prediction = []
-            for i, val in np.ndenumerate(prediction_plus):
-                prediction.append((val + prediction_minus[i]) / 2)
+            # commented out part is for the non-simplified neural network
+            # type_one_plus = first_type + "+"
+            # type_two_plus = second_type + "+"
+            # type_one_minus = first_type + "-"
+            # type_two_minus = second_type + "-"
+            # prediction_plus = model.predict([mergeList(blood_types[type_one_plus]
+            #                                            , blood_types[type_two_plus])])[0]
+            # prediction_minus = model.predict([mergeList(blood_types[type_one_minus]
+            #                                             , blood_types[type_two_minus])])[0]
+            # prediction = []
+            # for i, val in np.ndenumerate(prediction_plus):
+            #     prediction.append((val + prediction_minus[i]) / 2)
+            prediction = model.predict([mergeList(blood_types[first_type],
+                                                  blood_types[second_type])])[0]
             temp = prob_array_to_dict(prediction)
             sorted_keys = sorted(temp, key=temp.get, reverse=True)
             for k in sorted_keys:
@@ -207,7 +215,7 @@ while True:
             # sorting the probabilities from high to low + rounding the numbers
             temp_yPos = 80
             for k in prediction_dict.keys():
-                win.blit(text_font.render(k + ': ' + str(round(prediction_dict[k], 7)), True,
+                win.blit(text_font.render(k + ': ' + str(round(prediction_dict[k], 3) * 100), True,
                                           (0, 0, 0)),
                          (420, temp_yPos))
                 temp_yPos += 50

@@ -1,0 +1,17 @@
+﻿Blood type 1,Blood type 2,Resulting blood type
+A,A,A
+A,O,A
+O,A,A
+B,B,B
+B,O,B
+O,B,B
+AB,AB,AB
+A,B,AB
+B,A,AB
+AB,A,AB
+A,AB,AB
+AB,B,AB
+B,AB,AB
+AB,O,AB
+O,AB,AB
+O,O,O
