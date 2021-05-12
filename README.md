@@ -12,7 +12,7 @@ Both files can be run via whatever terminal interface you use,
 or though an IDE if you have one installed.
 
 # Training
-If you wanted to retrain the ANN yourself, there are three .csv files available in this repo. **Blood_types.csv** is takes into account Rh factor (+ or -) and lists out all possible blood type combinations based on it. **Blood_types_simplified.csv** removes the Rh factor, reducing the dataset to just 16 possible combinations (4 blood types, 4! combinations). Lastly, **Blood_types_mendelian.csv** incorporates true Mendelian genetics into the dataset, but still using the blood types rather than alleles. 
+If you wanted to retrain the ANN yourself, there are three .csv files available in this repo. **Blood_types.csv** takes into account Rh factor (+ or -) and lists out all possible blood type combinations based on it. **Blood_types_simplified.csv** removes the Rh factor, reducing the dataset to just 16 possible combinations (4 blood types, 4! combinations). Lastly, **Blood_types_mendelian.csv** incorporates true Mendelian genetics into the dataset, but still using the blood types rather than alleles. 
 
 The first two datasets will give you the highest ANN accuracies. The third dataset stays true to Mendelian genetics, but for some reason it does not result in an equally accurate ANN. However, the resulting probability matrix that the ANN trained with the third dataset outputs is close enough to the probabilities expected from drawing out a Punnet Square. Feel free to expand on that dataset even more by introducing alleles, which would definitely make the ANN more accurate.
 
