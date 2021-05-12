@@ -5,7 +5,7 @@ from keras import optimizers
 from tensorflow import keras
 
 # loading the .csv file into the program
-dataframe = pd.read_csv('C:/VIA Tech/Blood Type Prediction/Blood_types_simplified.csv',
+dataframe = pd.read_csv('C:/Blood Type Prediction/Blood_types_mendelian.csv',
                         ).values
 
 X = []
@@ -57,8 +57,8 @@ print('Accuracy = ', results[1])
 
 is_quit = False
 while not is_quit:
-    type_one = input("Type your first parent's blood type: ").capitalize()
-    type_two = input("Type your second parent's blood type: ").capitalize()
+    type_one = input("Type your first parent's blood type: ")
+    type_two = input("Type your second parent's blood type: ")
     temp = np.array(blood_types[type_one]) | np.array(blood_types[type_two])
     temp = np.ndarray.tolist(temp)
     prediction = model.predict([temp])[0]

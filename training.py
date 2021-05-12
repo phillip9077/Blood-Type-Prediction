@@ -5,7 +5,7 @@ from keras import optimizers
 from tensorflow import keras
 
 # loading the .csv file into the program
-dataframe = pd.read_csv('C:/VIA Tech/Blood Type Prediction/Blood_types.csv',
+dataframe = pd.read_csv('C:/Blood Type Prediction/Blood_types.csv',
                         ).values
 
 X = []
